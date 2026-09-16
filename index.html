@@ -1,0 +1,454 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sistema Element Sound — gestão para oficina de eletrônica automotiva</title>
+<meta name="description" content="Aplicativo Windows para oficina de som, alarme e elétrica automotiva: ordens de serviço, catálogo com leitor de código de barras, orçamento e recibo em PDF, estoque, financeiro e sincronização entre computadores.">
+<meta name="author" content="Smells Like Tech Informática">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Sistema Element Sound">
+<meta property="og:description" content="Aplicativo Windows para oficina de eletrônica automotiva. C#/.NET 10 com WPF.">
+<meta property="og:locale" content="pt_BR">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+
+<style>
+:root{
+  /* Página de produto: assume um visual só, de propósito. As cores são as do
+     próprio programa — marinho e laranja — e trocá-las no tema escuro faria os
+     prints das telas destoarem da página que os apresenta. */
+  color-scheme:light;
+  --marinho:#0B2A4A;
+  --marinho-claro:#14406E;
+  --laranja:#E07A1F;
+  --laranja-suave:#F5A65B;
+  --ground:#F5F6F9;
+  --surface:#FFFFFF;
+  --surface-2:#EAEEF4;
+  --ink:#131A23;
+  --ink-soft:#3A4654;
+  --muted:#65727F;
+  --hairline:#D9E0E9;
+  --verde:#1B7A4B;
+  --shadow:0 1px 2px rgba(11,42,74,.07), 0 14px 34px -22px rgba(11,42,74,.45);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--ground);color:var(--ink);
+  font-family:"Public Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:17px;line-height:1.62;-webkit-font-smoothing:antialiased;
+}
+img{max-width:100%;display:block}
+a{color:var(--marinho);text-underline-offset:3px}
+a:focus-visible{outline:2px solid var(--laranja);outline-offset:3px;border-radius:3px}
+
+h1,h2,h3,.eyebrow{font-family:Archivo,"Public Sans",sans-serif;text-wrap:balance}
+h1{font-size:clamp(2.3rem,6vw,4rem);font-weight:900;letter-spacing:-.03em;line-height:1.02;margin:0}
+h2{font-size:clamp(1.5rem,3.4vw,2.1rem);font-weight:800;letter-spacing:-.02em;line-height:1.14;margin:0}
+h3{font-size:1.06rem;font-weight:700;letter-spacing:-.008em;margin:0}
+p{margin:0;max-width:66ch}
+
+.wrap{max-width:1040px;margin:0 auto;padding:0 24px}
+@media (max-width:600px){.wrap{padding:0 18px}}
+
+.eyebrow{
+  font-size:.72rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--laranja);margin:0;
+}
+
+/* ---------- hero ---------- */
+.hero{
+  background:
+    radial-gradient(1100px 520px at 78% -12%, rgba(224,122,31,.20), transparent 62%),
+    linear-gradient(168deg, #0B2A4A 0%, #071D35 100%);
+  color:#EAF1F9;padding:84px 0 0;position:relative;overflow:hidden;
+}
+.hero::after{
+  content:"";position:absolute;inset:auto 0 0 0;height:1px;background:rgba(255,255,255,.12);
+}
+.hero .eyebrow{color:var(--laranja-suave)}
+.hero h1{color:#fff;margin-top:14px;max-width:16ch}
+.hero .sub{
+  font-size:clamp(1.05rem,2.2vw,1.3rem);color:#B9CBDE;max-width:56ch;margin-top:20px;line-height:1.5;
+}
+.hero-acoes{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px;align-items:center}
+.btn{
+  display:inline-flex;align-items:center;gap:9px;font-family:Archivo,sans-serif;
+  font-weight:700;font-size:.92rem;letter-spacing:.01em;padding:13px 22px;border-radius:7px;
+  text-decoration:none;transition:transform .15s ease, background .15s ease;
+}
+.btn--principal{background:var(--laranja);color:#1B0E02}
+.btn--principal:hover{background:var(--laranja-suave);transform:translateY(-1px)}
+.btn--fantasma{border:1px solid rgba(255,255,255,.28);color:#EAF1F9}
+.btn--fantasma:hover{background:rgba(255,255,255,.08)}
+.selo{
+  display:inline-flex;align-items:center;gap:8px;font-size:.8rem;color:#8FA8C2;
+  padding:7px 0;
+}
+.hero-shot{margin-top:56px;padding-bottom:0}
+.hero-shot img, .hero-shot .vazio{
+  border-radius:11px 11px 0 0;border:1px solid rgba(255,255,255,.16);border-bottom:0;
+  box-shadow:0 -2px 60px -18px rgba(0,0,0,.7);width:100%;
+}
+
+/* placeholder enquanto o print não está no repositório */
+.vazio{
+  aspect-ratio:16/10;background:rgba(255,255,255,.05);
+  display:flex;align-items:center;justify-content:center;text-align:center;
+  color:#7E96B0;font-size:.9rem;padding:24px;
+}
+
+/* ---------- blocos ---------- */
+section{padding:76px 0}
+.sec-cabeca{display:flex;flex-direction:column;gap:10px;margin-bottom:36px;max-width:62ch}
+.sec-cabeca p{color:var(--ink-soft)}
+
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(248px,1fr));gap:16px}
+.card{
+  background:var(--surface);border:1px solid var(--hairline);border-radius:10px;
+  padding:22px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:8px;
+}
+.card h3{color:var(--marinho)}
+.card p{font-size:.94rem;color:var(--ink-soft)}
+.card .ico{
+  width:34px;height:34px;border-radius:8px;background:var(--surface-2);
+  display:flex;align-items:center;justify-content:center;margin-bottom:4px;
+  font-family:Archivo,sans-serif;font-weight:800;font-size:.9rem;color:var(--marinho);
+}
+
+/* ---------- telas ---------- */
+.telas{display:flex;flex-direction:column;gap:56px}
+.tela{display:grid;grid-template-columns:1fr 1.35fr;gap:34px;align-items:center}
+.tela:nth-child(even){grid-template-columns:1.35fr 1fr}
+.tela:nth-child(even) .tela-texto{order:2}
+@media (max-width:820px){
+  .tela,.tela:nth-child(even){grid-template-columns:1fr;gap:20px}
+  .tela:nth-child(even) .tela-texto{order:0}
+}
+.tela-texto{display:flex;flex-direction:column;gap:10px}
+.tela-texto .eyebrow{color:var(--muted)}
+.tela-texto p{color:var(--ink-soft);font-size:.97rem}
+.tela figure{margin:0}
+.tela img, .tela .vazio{
+  border-radius:10px;border:1px solid var(--hairline);box-shadow:var(--shadow);width:100%;
+}
+.tela .vazio{background:var(--surface-2);color:var(--muted)}
+
+/* ---------- decisões ---------- */
+.decisoes{background:var(--surface);border-top:1px solid var(--hairline);border-bottom:1px solid var(--hairline)}
+.lista-decisoes{display:flex;flex-direction:column;gap:2px;background:var(--hairline);
+  border:1px solid var(--hairline);border-radius:11px;overflow:hidden}
+.decisao{background:var(--surface);padding:22px 24px;display:grid;grid-template-columns:auto 1fr;gap:6px 18px}
+@media (max-width:600px){.decisao{grid-template-columns:1fr;padding:18px}}
+.decisao .marca{
+  font-family:Archivo,sans-serif;font-weight:900;font-size:.72rem;letter-spacing:.09em;
+  color:var(--laranja);padding-top:5px;grid-row:1 / -1;
+}
+@media (max-width:600px){.decisao .marca{grid-row:auto}}
+.decisao h3{color:var(--marinho)}
+.decisao p{font-size:.95rem;color:var(--ink-soft)}
+
+/* ---------- tech ---------- */
+.tech{background:var(--marinho);color:#DCE7F2}
+.tech h2{color:#fff}
+.tech .sec-cabeca p{color:#AFC3D8}
+.tech-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:2px;
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.12);border-radius:10px;overflow:hidden}
+.tech-item{background:var(--marinho);padding:20px 22px;display:flex;flex-direction:column;gap:5px}
+.tech-item .rot{font-family:Archivo,sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.11em;
+  text-transform:uppercase;color:var(--laranja-suave)}
+.tech-item .val{font-size:.97rem;color:#EAF1F9;font-weight:600}
+.tech-item .obs{font-size:.85rem;color:#9FB6CC}
+
+.aviso{
+  margin-top:26px;border-left:3px solid var(--laranja);background:rgba(255,255,255,.06);
+  padding:16px 20px;border-radius:0 7px 7px 0;font-size:.93rem;color:#C9D9E8;max-width:70ch;
+}
+.aviso strong{color:#fff}
+
+/* ---------- contato ---------- */
+.contato{text-align:center}
+.contato .caixa{
+  background:var(--surface);border:1px solid var(--hairline);border-radius:14px;
+  padding:44px 30px;box-shadow:var(--shadow);display:flex;flex-direction:column;
+  align-items:center;gap:14px;
+}
+.contato h2{color:var(--marinho)}
+.contato p{color:var(--ink-soft);margin:0 auto}
+.contato .btn--principal{margin-top:8px}
+
+footer{padding:40px 0 60px;color:var(--muted);font-size:.87rem}
+.rodape{display:flex;flex-wrap:wrap;gap:8px 20px;justify-content:space-between;align-items:center}
+footer a{color:var(--muted)}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="eyebrow">Software para oficina · Windows</p>
+    <h1>Sistema Element Sound</h1>
+    <p class="sub">A oficina de som, alarme, insulfilm e elétrica automotiva inteira num programa só: da placa que entra na bancada ao recibo que sai pelo WhatsApp.</p>
+
+    <div class="hero-acoes">
+      <a class="btn btn--principal" href="#contato">Quero para minha oficina</a>
+      <a class="btn btn--fantasma" href="#telas">Ver as telas</a>
+    </div>
+    <p class="selo">Desenvolvido pela Smells Like Tech Informática · Porto Alegre</p>
+
+    <div class="hero-shot">
+      <img src="img/inicio.png" alt="Tela de Início do Sistema Element Sound, com os indicadores do mês e a lista de atendimentos em aberto">
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <div class="sec-cabeca">
+      <p class="eyebrow">O que ele resolve</p>
+      <h2>Feito para uma oficina de verdade, não para um escritório</h2>
+      <p>Cada decisão do programa saiu de um problema real do balcão: o cliente que liga dizendo a placa, o técnico que se distrai no meio da ordem, o balconista que vende sem cadastrar a peça.</p>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <div class="ico">OS</div>
+        <h3>Ordem de serviço pela placa</h3>
+        <p>O carro é reconhecido pela placa, que é como o cliente se identifica no telefone. Marca, modelo, ano, cor, quilometragem e chassi acompanham o atendimento e saem nos documentos.</p>
+      </div>
+      <div class="card">
+        <div class="ico">PDF</div>
+        <h3>Orçamento, recibo e extrato</h3>
+        <p>Três documentos, cada um respondendo a uma pergunta diferente — e os três cabem em uma folha. Saem em PDF ou vão direto para a conversa do WhatsApp.</p>
+      </div>
+      <div class="card">
+        <div class="ico">≡</div>
+        <h3>Catálogo com leitor</h3>
+        <p>Aponta o leitor de código de barras para a caixa e o item entra na venda, com preço e custo do momento. Código desconhecido abre o cadastro rápido sem abandonar a ordem.</p>
+      </div>
+      <div class="card">
+        <div class="ico">±</div>
+        <h3>Estoque que se move e se desfaz</h3>
+        <p>A peça sai quando o atendimento é concluído e volta se ele for reaberto, alterado ou excluído. O sistema lembra o que já baixou, então nada é descontado duas vezes.</p>
+      </div>
+      <div class="card">
+        <div class="ico">R$</div>
+        <h3>Financeiro e evolução</h3>
+        <p>Entradas, custos e gastos no mesmo lugar, com o lucro do mês já descontando peças e despesas. E o desempenho mês a mês, para ver se a oficina está crescendo.</p>
+      </div>
+      <div class="card">
+        <div class="ico">☁</div>
+        <h3>Dois computadores, os mesmos dados</h3>
+        <p>O balcão e a bancada veem as mesmas ordens. Funciona sem internet, e o que foi feito offline sobe quando a conexão volta.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="telas">
+  <div class="wrap">
+    <div class="sec-cabeca">
+      <p class="eyebrow">As telas</p>
+      <h2>Por dentro do programa</h2>
+    </div>
+
+    <div class="telas">
+
+      <div class="tela">
+        <div class="tela-texto">
+          <p class="eyebrow">Ordens de serviço</p>
+          <h3>Tudo o que está na oficina, numa lista</h3>
+          <p>Busca por placa, cliente, veículo, número ou serviço. A coluna <em>Falta</em> mostra o que está pendente em cada atendimento — cliente, placa, descrição ou valor — para nenhuma ordem pela metade se esconder entre as prontas.</p>
+          <p>Marcando várias do mesmo cliente com Ctrl, sai o extrato de todas num papel só.</p>
+        </div>
+        <figure>
+          <img src="img/ordens.png" alt="Lista de ordens de serviço, com filtro por status, busca e a coluna Falta">
+        </figure>
+      </div>
+
+      <div class="tela">
+        <div class="tela-texto">
+          <p class="eyebrow">Nova OS</p>
+          <h3>Grava sozinha, desde a primeira tecla</h3>
+          <p>Tudo o que é digitado é salvo um segundo depois — e também ao trocar de aba e ao fechar o programa. Nenhum campo é obrigatório: basta um preenchido e a ordem existe, com número.</p>
+          <p>O que foi <em>encontrado</em> e o que foi <em>feito</em> são campos separados, porque são duas coisas diferentes, e o recibo mostra os dois.</p>
+        </div>
+        <figure>
+          <img src="img/nova-os.png" alt="Tela de abertura de ordem de serviço, com dados do cliente, do veículo e do atendimento">
+        </figure>
+      </div>
+
+      <div class="tela">
+        <div class="tela-texto">
+          <p class="eyebrow">Venda rápida</p>
+          <h3>O balcão que não precisa de ordem de serviço</h3>
+          <p>Vender um fusível, um par de alto-falantes ou um controle de alarme não exige carro na bancada nem defeito relatado. Leitor, lista de itens, total e um botão.</p>
+          <p>Por dentro a venda vira um atendimento já pago, então cai sozinha no financeiro, baixa o estoque e pode emitir recibo.</p>
+        </div>
+        <figure>
+          <img src="img/venda-rapida.png" alt="Tela de venda rápida de balcão, com leitor de código de barras, itens lançados e total">
+        </figure>
+      </div>
+
+      <div class="tela">
+        <div class="tela-texto">
+          <p class="eyebrow">Produtos</p>
+          <h3>Catálogo pensado para o leitor</h3>
+          <p>O campo de leitura recebe o foco ao abrir a tela e o código filtra a lista na hora. Código repetido é recusado, porque dois itens com o mesmo número tornariam a leitura ambígua justamente quando ela precisa ser instantânea.</p>
+          <p>Uma faixa avisa quantos produtos ficaram sem preço de custo — sem isso, o lucro do mês sairia inflado em silêncio.</p>
+        </div>
+        <figure>
+          <img src="img/produtos.png" alt="Catálogo de produtos com código de barras, categorias, preços e estoque">
+        </figure>
+      </div>
+
+      <div class="tela">
+        <div class="tela-texto">
+          <p class="eyebrow">Financeiro e funcionários</p>
+          <h3>O dinheiro que entra e o que sai</h3>
+          <p>Gastos operacionais por categoria, indicadores do período e a folha de pagamento: salário, adiantamento, passagem, e o que o funcionário levou do balcão para descontar. A conta do que ainda falta pagar aparece pronta.</p>
+        </div>
+        <figure>
+          <img src="img/financeiro.png" alt="Tela financeira com indicadores do período e lançamento de gastos">
+        </figure>
+      </div>
+
+      <div class="tela">
+        <div class="tela-texto">
+          <p class="eyebrow">Documentos</p>
+          <h3>Uma folha, entregue na mão ou no WhatsApp</h3>
+          <p>Orçamento, recibo e extrato são montados, medidos e — se passaram da página — montados de novo com medidas menores. A segunda versão só vale se economizar uma folha, senão o atendimento longo viraria letra miúda sem ganho nenhum.</p>
+        </div>
+        <figure>
+          <img src="img/documento.png" alt="Recibo em PDF gerado pelo sistema, com dados do cliente, do veículo, serviço e garantia">
+        </figure>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="decisoes">
+  <div class="wrap">
+    <div class="sec-cabeca">
+      <p class="eyebrow">Como ele foi feito</p>
+      <h2>As decisões que sustentam o programa</h2>
+      <p>Um sistema de oficina não erra alto: erra em silêncio, num número que não fecha no fim do mês. Estas são algumas escolhas tomadas para que isso não aconteça.</p>
+    </div>
+
+    <div class="lista-decisoes">
+      <div class="decisao">
+        <span class="marca">01</span>
+        <h3>A placa é a identidade do carro</h3>
+        <p>Guardada só com letras e dígitos, em maiúsculas: <em>abc1d23</em>, <em>ABC-1D23</em> e <em>abc 1d23</em> são o mesmo carro. A busca aceita as três formas; os documentos imprimem a formatada.</p>
+      </div>
+      <div class="decisao">
+        <span class="marca">02</span>
+        <h3>O estoque lembra o que já baixou</h3>
+        <p>O sistema não desconta por evento — ele guarda, por atendimento, o que já tirou da prateleira, compara com o que deveria ter tirado e move só a diferença. É o que faz sincronizar dez vezes seguidas não contar a mesma venda dez vezes.</p>
+      </div>
+      <div class="decisao">
+        <span class="marca">03</span>
+        <h3>Dinheiro não é ponto flutuante</h3>
+        <p>Valores são guardados como texto decimal, e não como número de ponto flutuante. R$ 0,10 em <em>float</em> volta 0,1000000000000000055 — um centavo de erro por linha, que só aparece somado no fechamento do mês.</p>
+      </div>
+      <div class="decisao">
+        <span class="marca">04</span>
+        <h3>Apagado continua apagado</h3>
+        <p>Uma exclusão vira registro e viaja entre os computadores como qualquer alteração. Sem isso, o que foi apagado num aparelho voltaria do outro como novidade na sincronização seguinte.</p>
+      </div>
+      <div class="decisao">
+        <span class="marca">05</span>
+        <h3>Vender mais do que existe deixa o estoque negativo</h3>
+        <p>E não preso em zero, de propósito: o número negativo é o que faz alguém ir conferir a prateleira. Prender em zero esconderia a divergência.</p>
+      </div>
+      <div class="decisao">
+        <span class="marca">06</span>
+        <h3>Números de atendimento que não colidem</h3>
+        <p>Cada computador reserva uma faixa de números antes de precisar dela, o que permite abrir atendimento offline nos dois sem os dois emitirem a mesma OS. Se ainda assim coincidirem, quem criou depois é renumerado — a ordem mais antiga tem mais chance de já ter virado papel na mão do cliente.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="tech">
+  <div class="wrap">
+    <div class="sec-cabeca">
+      <p class="eyebrow">Por dentro</p>
+      <h2>Tecnologia</h2>
+      <p>Aplicativo de desktop nativo, sem navegador embutido e sem runtime para o cliente instalar.</p>
+    </div>
+
+    <div class="tech-grid">
+      <div class="tech-item">
+        <span class="rot">Linguagem</span>
+        <span class="val">C# · .NET 10</span>
+        <span class="obs">Publicado autocontido</span>
+      </div>
+      <div class="tech-item">
+        <span class="rot">Interface</span>
+        <span class="val">WPF</span>
+        <span class="obs">Uma tela por arquivo</span>
+      </div>
+      <div class="tech-item">
+        <span class="rot">Banco de dados</span>
+        <span class="val">SQLite</span>
+        <span class="obs">Transacional, com degraus de versão</span>
+      </div>
+      <div class="tech-item">
+        <span class="rot">Nuvem</span>
+        <span class="val">Firebase Auth · Cloud Firestore</span>
+        <span class="obs">Sincronização incremental nos dois sentidos</span>
+      </div>
+      <div class="tech-item">
+        <span class="rot">Documentos</span>
+        <span class="val">MigraDoc · PDFsharp</span>
+        <span class="obs">Layout medido e remontado para caber numa folha</span>
+      </div>
+      <div class="tech-item">
+        <span class="rot">Segurança</span>
+        <span class="val">DPAPI</span>
+        <span class="obs">Credenciais cifradas e presas ao usuário da máquina</span>
+      </div>
+      <div class="tech-item">
+        <span class="rot">Testes</span>
+        <span class="val">xUnit</span>
+        <span class="obs">Mais de 240 testes automatizados</span>
+      </div>
+      <div class="tech-item">
+        <span class="rot">Distribuição</span>
+        <span class="val">Inno Setup</span>
+        <span class="obs">Instalador próprio, com dados fora da pasta do programa</span>
+      </div>
+    </div>
+
+    <p class="aviso"><strong>Software proprietário.</strong> O código-fonte não é público e não é distribuído. Esta página existe para apresentar o produto; o programa é licenciado e entregue instalado ao cliente, com suporte.</p>
+  </div>
+</section>
+
+<section id="contato" class="contato">
+  <div class="wrap">
+    <div class="caixa">
+      <p class="eyebrow">Fale comigo</p>
+      <h2>Quer o sistema na sua oficina?</h2>
+      <p>Atendo oficinas de som, alarme, insulfilm, iluminação e elétrica automotiva. O sistema é instalado, configurado com os dados da sua oficina e entregue funcionando.</p>
+      <a class="btn btn--principal" href="https://wa.me/5551986382043?text=Ol%C3%A1%21%20Vi%20o%20Sistema%20Element%20Sound%20e%20quero%20saber%20mais." target="_blank" rel="noopener">Chamar no WhatsApp</a>
+      <p style="font-size:.9rem">ou <a href="mailto:smellsliketechinfo@gmail.com">smellsliketechinfo@gmail.com</a></p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap rodape">
+    <span>© 2026 Smells Like Tech Informática · Porto Alegre / RS</span>
+    <span><a href="https://smellsliketech.com.br" target="_blank" rel="noopener">smellsliketech.com.br</a></span>
+  </div>
+</footer>
+
+</body>
+</html>
