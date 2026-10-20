@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Sistema Element Sound — gestão para oficina de eletrônica automotiva</title>
-<meta name="description" content="Aplicativo Windows para oficina de som, alarme e elétrica automotiva: ordens de serviço, catálogo com leitor de código de barras, orçamento e recibo em PDF, estoque, financeiro e sincronização entre computadores.">
+<meta name="description" content="Aplicativo Windows para oficina de som, alarme e elétrica automotiva: ordens de serviço, cobrança integrada à maquininha da Vero (Banrisul Pagamentos), pagamento em partes, catálogo com leitor de código de barras, orçamento e recibo em PDF, estoque, financeiro e sincronização entre computadores.">
 <meta name="author" content="Smells Like Tech Informática">
 
 <meta property="og:type" content="website">
 <meta property="og:title" content="Sistema Element Sound">
-<meta property="og:description" content="Aplicativo Windows para oficina de eletrônica automotiva. C#/.NET 10 com WPF.">
+<meta property="og:description" content="Aplicativo Windows para oficina de eletrônica automotiva, com cobrança integrada à maquininha da Vero. C#/.NET 10 com WPF.">
 <meta property="og:locale" content="pt_BR">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -139,6 +139,29 @@ section{padding:76px 0}
 }
 .tela .vazio{background:var(--surface-2);color:var(--muted)}
 
+/* ---------- parceria ---------- */
+.selo-parceria{
+  display:inline-flex;align-items:center;gap:10px;margin-top:22px;
+  padding:9px 14px;border:1px solid rgba(245,166,91,.45);border-radius:999px;
+  background:rgba(224,122,31,.12);color:#FBD9B5;font-size:.86rem;font-weight:600;
+}
+.selo-parceria .ponto{width:8px;height:8px;border-radius:50%;background:var(--laranja-suave)}
+.vero{background:var(--surface);border-top:1px solid var(--hairline);border-bottom:1px solid var(--hairline)}
+.vero-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.82fr);gap:40px;align-items:start}
+@media (max-width:860px){.vero-grid{grid-template-columns:1fr}}
+.vero-pontos{list-style:none;margin:22px 0 0;padding:0;display:flex;flex-direction:column;gap:14px}
+.vero-pontos li{display:grid;grid-template-columns:22px 1fr;gap:10px;color:var(--ink-soft);font-size:.96rem}
+.vero-pontos li::before{content:"";width:10px;height:10px;margin-top:8px;border-radius:2px;background:var(--laranja)}
+.vero-pontos strong{color:var(--marinho)}
+.formas{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.formas span{
+  font-size:.82rem;font-weight:600;color:var(--marinho);background:var(--surface-2);
+  border:1px solid var(--hairline);border-radius:6px;padding:5px 10px;
+}
+.vero figure{margin:0;max-width:440px;justify-self:center}
+.vero figure img{border-radius:10px;border:1px solid var(--hairline);box-shadow:var(--shadow);width:100%}
+.vero figcaption{font-size:.84rem;color:var(--muted);margin-top:10px;text-align:center}
+
 /* ---------- decisões ---------- */
 .decisoes{background:var(--surface);border-top:1px solid var(--hairline);border-bottom:1px solid var(--hairline)}
 .lista-decisoes{display:flex;flex-direction:column;gap:2px;background:var(--hairline);
@@ -193,10 +216,12 @@ footer a{color:var(--muted)}
   <div class="wrap">
     <p class="eyebrow">Software para oficina · Windows</p>
     <h1>Sistema Element Sound</h1>
-    <p class="sub">A oficina de som, alarme, insulfilm e elétrica automotiva inteira num programa só: da placa que entra na bancada ao recibo que sai pelo WhatsApp.</p>
+    <p class="sub">A oficina de som, alarme, insulfilm e elétrica automotiva inteira num programa só: da placa que entra na bancada à cobrança na maquininha e ao recibo que sai pelo WhatsApp.</p>
+    <p class="selo-parceria"><span class="ponto" aria-hidden="true"></span>Smells Like Tech Informática é parceira da Vero · Banrisul Pagamentos — integração homologada</p>
 
     <div class="hero-acoes">
       <a class="btn btn--principal" href="#contato">Quero para minha oficina</a>
+      <a class="btn btn--fantasma" href="#vero">A integração com a Vero</a>
       <a class="btn btn--fantasma" href="#telas">Ver as telas</a>
     </div>
     <p class="selo">Desenvolvido pela Smells Like Tech Informática · Porto Alegre</p>
@@ -237,15 +262,59 @@ footer a{color:var(--muted)}
         <p>A peça sai quando o atendimento é concluído e volta se ele for reaberto, alterado ou excluído. O sistema lembra o que já baixou, então nada é descontado duas vezes.</p>
       </div>
       <div class="card">
+        <div class="ico">▣</div>
+        <h3>Cobrança na maquininha</h3>
+        <p>O valor vai do sistema direto para a maquininha da Vero, e a venda só fecha quando o pagamento é aprovado. Banricompras, débito, crédito, Pix e Vero Wallet, com o comprovante guardado na OS.</p>
+      </div>
+      <div class="card">
+        <div class="ico">½</div>
+        <h3>Pagamento em partes</h3>
+        <p>O sinal na entrada do carro, o resto na retirada, um Pix por fora: cada pagamento fica registrado, a OS mostra quanto falta e vira paga sozinha quando o saldo zera.</p>
+      </div>
+      <div class="card">
         <div class="ico">R$</div>
         <h3>Financeiro e evolução</h3>
-        <p>Entradas, custos e gastos no mesmo lugar, com o lucro do mês já descontando peças e despesas. E o desempenho mês a mês, para ver se a oficina está crescendo.</p>
+        <p>O dinheiro contado no dia em que entrou, o que ainda está para receber, e o lucro já descontando peças e despesas. E o desempenho mês a mês, para ver se a oficina está crescendo.</p>
       </div>
       <div class="card">
         <div class="ico">☁</div>
         <h3>Dois computadores, os mesmos dados</h3>
         <p>O balcão e a bancada veem as mesmas ordens. Funciona sem internet, e o que foi feito offline sobe quando a conexão volta.</p>
       </div>
+    </div>
+  </div>
+</section>
+
+<section id="vero" class="vero">
+  <div class="wrap">
+    <div class="vero-grid">
+      <div>
+        <div class="sec-cabeca" style="margin-bottom:0">
+          <p class="eyebrow">Parceria Vero · Banrisul Pagamentos</p>
+          <h2>A maquininha cobra direto do sistema</h2>
+          <p>A Smells Like Tech Informática é parceira da Vero, a maquininha do Banrisul, e a integração do Sistema Element Sound foi homologada por ela. O balconista escolhe a forma de pagamento na tela, a cobrança abre sozinha na maquininha, e o programa fica sabendo do resultado — sem digitar valor duas vezes e sem lançar a venda na mão depois.</p>
+        </div>
+
+        <div class="formas" aria-label="Formas de pagamento aceitas">
+          <span>Banricompras à vista</span><span>Banricompras parcelado</span>
+          <span>Banricompras pré-datado</span><span>Crédito 1 Minuto</span>
+          <span>Débito</span><span>Crédito à vista</span><span>Crédito parcelado</span>
+          <span>Pix</span><span>Vero Wallet</span><span>Voucher</span>
+        </div>
+
+        <ul class="vero-pontos">
+          <li><span><strong>A venda só fecha quando a maquininha aprova.</strong> Nada sai do estoque e nenhum dinheiro é contado antes disso.</span></li>
+          <li><span><strong>O comprovante fica na OS.</strong> NSU, bandeira, autorização e a via do cliente, para conferir com o extrato e estornar depois.</span></li>
+          <li><span><strong>Estorno pela própria OS,</strong> de um pagamento só — devolver o sinal não desfaz o pagamento do saldo.</span></li>
+          <li><span><strong>Programa fechado no meio da cobrança?</strong> Ao abrir, ele pergunta à Vero o que aconteceu e oferece lançar o pagamento na OS certa.</span></li>
+          <li><span><strong>Pronto para usar.</strong> A integração já vem ativa no programa; a oficina informa só o CNPJ dela e o aparelho.</span></li>
+        </ul>
+      </div>
+
+      <figure>
+        <img src="img/cobrar-vero.png" alt="Janela Cobrar com a Vero, com as formas de pagamento agrupadas em Banricompras, cartão e outras, e o Banricompras parcelado em 2 vezes escolhido">
+        <figcaption>A janela de cobrança: escolhida a forma, a cobrança abre sozinha na maquininha.</figcaption>
+      </figure>
     </div>
   </div>
 </section>
@@ -263,7 +332,7 @@ footer a{color:var(--muted)}
         <div class="tela-texto">
           <p class="eyebrow">Ordens de serviço</p>
           <h3>Tudo o que está na oficina, numa lista</h3>
-          <p>Busca por placa, cliente, veículo, número ou serviço. A coluna <em>Falta</em> mostra o que está pendente em cada atendimento — cliente, placa, descrição ou valor — para nenhuma ordem pela metade se esconder entre as prontas.</p>
+          <p>Busca por placa, cliente, veículo, número ou serviço. A coluna <em>Falta</em> mostra o que está pendente em cada atendimento — cliente, placa, descrição, valor ou o saldo a receber — para nenhuma ordem pela metade se esconder entre as prontas.</p>
           <p>Marcando várias do mesmo cliente com Ctrl, sai o extrato de todas num papel só.</p>
         </div>
         <figure>
@@ -285,10 +354,22 @@ footer a{color:var(--muted)}
 
       <div class="tela">
         <div class="tela-texto">
+          <p class="eyebrow">Pagamentos</p>
+          <h3>Recebe em partes, e sabe quanto falta</h3>
+          <p>Cada pagamento da OS é uma linha, com data, forma e valor — à mão para dinheiro e Pix direto, ou cobrado na maquininha com o comprovante junto. O valor a receber já vem com o que falta; para receber só uma parte, é só trocar.</p>
+          <p>Quitada, a OS vira <em>Paga</em> sozinha. Se um pagamento é estornado depois, ela vai para <em>Pagamento pendente</em> e volta a aparecer como a receber.</p>
+        </div>
+        <figure>
+          <img src="img/pagamentos.png" alt="Editor de ordem de serviço com o quadro de pagamentos: um Pix na entrada e um Banricompras parcelado em 2 vezes, e o saldo a receber">
+        </figure>
+      </div>
+
+      <div class="tela">
+        <div class="tela-texto">
           <p class="eyebrow">Venda rápida</p>
           <h3>O balcão que não precisa de ordem de serviço</h3>
           <p>Vender um fusível, um par de alto-falantes ou um controle de alarme não exige carro na bancada nem defeito relatado. Leitor, lista de itens, total e um botão.</p>
-          <p>Por dentro a venda vira um atendimento já pago, então cai sozinha no financeiro, baixa o estoque e pode emitir recibo.</p>
+          <p>O botão <em>Cobrar com a Vero</em> manda o total para a maquininha. Por dentro a venda vira um atendimento já pago, então cai sozinha no financeiro, baixa o estoque e pode emitir recibo.</p>
         </div>
         <figure>
           <img src="img/venda-rapida.png" alt="Tela de venda rápida de balcão, com leitor de código de barras, itens lançados e total">
@@ -323,10 +404,11 @@ footer a{color:var(--muted)}
         <div class="tela-texto">
           <p class="eyebrow">Financeiro</p>
           <h3>O dinheiro que entra e o que sai</h3>
-          <p>Gastos operacionais por categoria, indicadores do período e o lucro já descontando peças e despesas. O custo da oficina nunca aparece nos papéis entregues ao cliente — é informação de gestão, e fica aqui.</p>
+          <p>O recebido é contado no dia em que o dinheiro entrou — o sinal de hoje e o saldo da semana que vem caem cada um no seu dia —, ao lado do que as ordens ainda devem e do quanto entrou por forma de pagamento, com o parcelado em 2x e em 3x separados.</p>
+          <p>Gastos por categoria e o lucro já descontando peças e despesas. O custo da oficina nunca aparece nos papéis entregues ao cliente.</p>
         </div>
         <figure>
-          <img src="img/financeiro.png" alt="Tela financeira com indicadores do período e lançamento de gastos por categoria">
+          <img src="img/financeiro.png" alt="Tela financeira com recebido, a receber, custo de peças, gastos e lucro do período, e o recebido por forma de pagamento">
         </figure>
       </div>
 
@@ -339,6 +421,17 @@ footer a{color:var(--muted)}
         </div>
         <figure>
           <img src="img/funcionarios.png" alt="Tela de funcionários com o fechamento do mês e os lançamentos da folha">
+        </figure>
+      </div>
+
+      <div class="tela">
+        <div class="tela-texto">
+          <p class="eyebrow">Configurações</p>
+          <h3>A maquininha, em dois campos</h3>
+          <p>A integração com a Vero já vem ativa no programa: a oficina informa o CNPJ dela, o mesmo da maquininha, e o token do aparelho, que o app da Vero mostra ao abrir. Um botão vincula, outro testa, e o diário do que foi mandado à Vero fica à mão para o suporte.</p>
+        </div>
+        <figure>
+          <img src="img/configuracoes-vero.png" alt="Tela de configurações com a seção Maquininha: integração da Vero ativa, CNPJ da oficina e token do aparelho">
         </figure>
       </div>
 
@@ -396,6 +489,16 @@ footer a{color:var(--muted)}
         <h3>Números de atendimento que não colidem</h3>
         <p>Cada computador reserva uma faixa de números antes de precisar dela, o que permite abrir atendimento offline nos dois sem os dois emitirem a mesma OS. Se ainda assim coincidirem, quem criou depois é renumerado — a ordem mais antiga tem mais chance de já ter virado papel na mão do cliente.</p>
       </div>
+      <div class="decisao">
+        <span class="marca">07</span>
+        <h3>O pagamento sobrevive ao programa fechar</h3>
+        <p>A maquininha não sabe que o computador caiu e conclui o pagamento assim mesmo. Por isso a cobrança é anotada no disco antes de sair, e ao abrir de novo o programa pergunta à Vero o que aconteceu — senão o dinheiro entraria sem venda, e a diferença só apareceria no fechamento do mês.</p>
+      </div>
+      <div class="decisao">
+        <span class="marca">08</span>
+        <h3>Só o que a maquininha confirmou conta</h3>
+        <p>A venda fecha depois da aprovação, nunca antes; o estorno só tira o dinheiro do financeiro depois de a maquininha confirmar. Quando a resposta deixa dúvida, o programa pergunta pelo comprovante impresso em vez de adivinhar — e trava o botão, para ninguém devolver duas vezes.</p>
+      </div>
     </div>
   </div>
 </section>
@@ -430,6 +533,11 @@ footer a{color:var(--muted)}
         <span class="obs">Sincronização incremental nos dois sentidos</span>
       </div>
       <div class="tech-item">
+        <span class="rot">Pagamentos</span>
+        <span class="val">Vero Cliente PDV</span>
+        <span class="obs">Integração homologada pela Vero · Banrisul Pagamentos</span>
+      </div>
+      <div class="tech-item">
         <span class="rot">Documentos</span>
         <span class="val">MigraDoc · PDFsharp</span>
         <span class="obs">Layout medido e remontado para caber numa folha</span>
@@ -442,7 +550,7 @@ footer a{color:var(--muted)}
       <div class="tech-item">
         <span class="rot">Testes</span>
         <span class="val">xUnit</span>
-        <span class="obs">Mais de 240 testes automatizados</span>
+        <span class="obs">Mais de 370 testes automatizados</span>
       </div>
       <div class="tech-item">
         <span class="rot">Distribuição</span>
